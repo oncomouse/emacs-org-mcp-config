@@ -1,9 +1,4 @@
-;;; init.el --- Emacs-Kick --- A feature rich Emacs config for (neo)vi(m)mers -*- lexical-binding: t; -*-
-;; Author: Rahul Martim Juliato
-
-;; Version: 0.2.0
-;; Package-Requires: ((emacs "30.1"))
-;; License: GPL-2.0-or-later
+;;; init.el --- ORG-MCP config -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 ;;; Code:
@@ -112,23 +107,16 @@
   (initial-scratch-message "")                    ;; Clear the initial message in the *scratch* buffer.
   (ispell-dictionary "en_US")                     ;; Set the default dictionary for spell checking.
   (make-backup-files nil)                         ;; Disable creation of backup files.
-  (pixel-scroll-precision-mode t)                 ;; Enable precise pixel scrolling.
-  (pixel-scroll-precision-use-momentum nil)       ;; Disable momentum scrolling for pixel precision.
   (ring-bell-function 'ignore)                    ;; Disable the audible bell.
   (split-width-threshold 300)                     ;; Prevent automatic window splitting if the window width exceeds 300 pixels.
   (switch-to-buffer-obey-display-actions t)       ;; Make buffer switching respect display actions.
   (tab-always-indent 'complete)                   ;; Make the TAB key complete text instead of just indenting.
   (tab-width 4)                                   ;; Set the tab width to 4 spaces.
-  (treesit-font-lock-level 4)                     ;; Use advanced font locking for Treesit mode.
   (truncate-lines t)                              ;; Enable line truncation to avoid wrapping long lines.
   (use-dialog-box nil)                            ;; Disable dialog boxes in favor of minibuffer prompts.
   (use-short-answers t)                           ;; Use short answers in prompts for quicker responses (y instead of yes)
   (sentence-end-double-space nil)                 ;; It's no longer the 1980s, Emacs
   ;; (warning-minimum-level :emergency)              ;; Set the minimum level of warnings to display.
-
-  :hook                                           ;; Add hooks to enable specific features in certain modes.
-  (before-save . delete-trailing-whitespace)      ;; Delete trailing spaces on save
-
   :config
   ;; By default emacs gives you access to a lot of *special* buffers, while navigating with [b and ]b,
   ;; this might be confusing for newcomers. This settings make sure ]b and [b will always load a
@@ -377,26 +365,6 @@
              :hook
              (after-init . mcp-server-lib-start))
 
-
-;;; UTILITARY FUNCTION TO INSTALL EMACS-KICK
-(defun ek/first-install ()
-  "Install tree-sitter grammars and compile packages on first run..."
-  (interactive)                                      ;; Allow this function to be called interactively.
-  (switch-to-buffer "*Messages*")                    ;; Switch to the *Messages* buffer to display installation messages.
-  (message ">>> All required packages installed.")
-  (message ">>> Configuring Emacs-Kick...")
-  (message ">>> Installing Python tooling...")
-  (unless (file-exists-p (expand-file-name ".pixi" user-emacs-directory))
-	(shell-command (concat "pixi install -m " (expand-file-name (concat user-emacs-directory "pixi.toml")))))
-  (message ">>> Configuring Tree Sitter parsers...")
-  (require 'treesit-auto)
-  (treesit-auto-install-all)                         ;; Install all available Tree Sitter grammars.
-  (message ">>> Configuring Nerd Fonts...")
-  (require 'nerd-icons)
-  (nerd-icons-install-fonts)                         ;; Install all available nerd-fonts
-  (message ">>> Emacs-Kick installed! Press any key to close the installer and open Emacs normally. First boot will compile some extra stuff :)")
-  (read-key)                                         ;; Wait for the user to press any key.
-  (kill-emacs))                                      ;; Close Emacs after installation is complete.
 
 (provide 'init)
 ;;; init.el ends here
